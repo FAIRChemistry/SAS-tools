@@ -2,15 +2,14 @@
 
 import numpy as np
 
-from enums import SAXSStandards
-from llcphase import LLCPhase
-from llcphases import (
+from analyzer.enums import SAXSStandards
+from analyzer.llcphase import LLCPhase
+from analyzer.llcphases import (
     CubicPhase,
     HexagonalPhase,
     IndeterminatePhase,
     LamellarPhase,
 )
-from sastools.analyzer.enums import LLCSpaceGroups
 
 
 class PrepareStandard:

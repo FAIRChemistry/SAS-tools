@@ -1,9 +1,9 @@
 """Different space groups and their properties needed for analyzers."""
 
-from enums import LLCPhases, LLCSpaceGroups, LLCMillerIndices
-from llcphase import LLCPhase
-
 import numpy as np
+
+from analyzer.enums import LLCPhases, LLCSpaceGroups, LLCMillerIndices
+from analyzer.llcphase import LLCPhase
 
 
 class HexagonalPhase(LLCPhase):

@@ -1,7 +1,8 @@
 """ABC defining properties of different LLC phases."""
 
-from enums import LLCPhases, LLCSpaceGroups
 from abc import ABC, abstractmethod
+
+from analyzer.enums import LLCPhases, LLCSpaceGroups
 
 
 class LLCPhase(ABC):
