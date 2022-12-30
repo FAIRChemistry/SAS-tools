@@ -6,6 +6,7 @@ import json
 import random
 
 from pathlib import Path
+from typing import Tuple, Dict, Optional
 
 import numpy as np
 import pandas as pd
@@ -37,6 +38,7 @@ class CurveFitting:
             path_plots (Path): Path to where plots are to be saved.
             path_fitting_data (Path): Path to where fitting data is to be saved.
         """
+        
         self.exp_data = experimental_data
         self.x = self.exp_data.iloc[:, 0].values.tolist()
         self.y = self.exp_data.iloc[:, 1].values.tolist()
@@ -44,7 +46,7 @@ class CurveFitting:
         self.path_plots = path_plots
         self.path_fitting_data = path_fitting_data
 
-    def _pack_data_into_dict(self) -> dict:
+    def _pack_data_into_dict(self) -> Dict:
         # Stores the data in a dictionary
         data_dict = {"data": {"x": self.x, "y": self.y}}
         return data_dict
@@ -63,7 +65,7 @@ class CurveFitting:
         )
 
     def find_peaks_cwt(
-        self, peak_widths: tuple = (20,), cutoff_amplitude: float = None
+        self, peak_widths: Tuple = (20,), cutoff_amplitude: Optional[float] = None
     ) -> None:
         """Find peaks using the `find_peaks_cwt` method from signal.
         Prints number of found peaks. Figure with positions of found
@@ -108,7 +110,7 @@ class CurveFitting:
         )
 
     def set_specifications_manually(
-        self, number_of_models: int, model_specifications: dict
+        self, number_of_models: int, model_specifications: Dict
     ) -> None:
         """Manually sets the specifications for the individual model
         used for the fitting procedure. Stores the generated
@@ -176,7 +178,7 @@ class CurveFitting:
         ) as outfile:
             outfile.write(json_models_dict)
 
-    def generate_model(self, speci: dict) -> tuple:
+    def generate_model(self, speci: Dict) -> tuple:
         """Generates a composite model and corresponding parameters
         based on the provided specifications using the `model` class
         of the python library `lmfit`.

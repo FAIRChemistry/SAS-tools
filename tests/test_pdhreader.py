@@ -2,6 +2,7 @@
 
 from pathlib import Path
 import pytest
+import re
 
 from lxml import etree
 import pandas as pd
@@ -20,7 +21,14 @@ def test_pdh_reader_repr(pdh_reader):
 
 def test_pdh_reader_enumerate_available_files(pdh_reader):
     available_files = pdh_reader.enumerate_available_files()
-    assert available_files == {0: "pdh_test_1", 1: "pdh_test_0"}
+
+    FILE_PATTERN = r"pdh_test_[\d]*"
+    matches = lambda fname: bool(re.match(FILE_PATTERN, fname))
+
+    assert len(available_files) == 2, f"Expected 2 files, got {len(available_files)}"
+    assert all(
+        matches(name) for name in available_files.values()
+    ), f"File names have changed, got {available_files.values()}"
 
 
 def test_pdh_reader_extract_data(pdh_reader):

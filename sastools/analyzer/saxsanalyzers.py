@@ -2,6 +2,8 @@
 
 import numpy as np
 
+from typing import List, Tuple, Dict, Optional
+
 from sastools.analyzer.enums import SAXSStandards
 from sastools.analyzer.llcphase import LLCPhase
 from sastools.analyzer.llcphases import (
@@ -18,7 +20,9 @@ class PrepareStandard:
     """
 
     def __init__(
-        self, standard: SAXSStandards = None, q_std_lit: list[float] = None
+        self,
+        standard: Optional[SAXSStandards] = None,
+        q_std_lit: Optional[List[float]] = None,
     ) -> None:
         """Select standard for calibration of SAXS data from
         `SAXSStandards` enum. If no standard is given, `q_std_lit`
@@ -27,7 +31,7 @@ class PrepareStandard:
 
         Args:
             standard (SAXSStandards, optional): Common SAXS standard used in experiment. Defaults to None.
-            q_std_lit (list[float], optional): Literature values for scattering vector of standard used in experiment. Defaults to None.
+            q_std_lit (List[float], optional): Literature values for scattering vector of standard used in experiment. Defaults to None.
 
         Raises:
             ValueError: If both standard and q_std_lit are provided.
@@ -52,21 +56,21 @@ class PrepareStandard:
             )
 
     def calculate_scattering_vector(
-        self, d_std_lit: list[float] = None
-    ) -> list[float]:
+        self, d_std_lit: Optional[List[float]] = None
+    ) -> List[float]:
         """Calculate scattering vector `q_std_lit` (nm^-1) for
         calibration from literature lattice plane distance `d_std_lit`
         (nm).
 
         Args:
-            d_std_lit (list[float], optional): Lattice plane distance from literature. Defaults to None.
+            d_std_lit (List[float], optional): Lattice plane distance from literature. Defaults to None.
 
         Raises:
             ValueError: If d_std_lit is not given and neither a standard nor q_std_lit have been initialized.
             ValueError: If d_std_lit list is empty.
 
         Returns:
-            list[float]: Scattering vector q_std_lit.
+            List[float]: Scattering vector q_std_lit.
         """
         if self._q_std_lit:
             print(
@@ -83,15 +87,13 @@ class PrepareStandard:
                     "d_std_lit has to be given, as neither a SAXS standard nor q_std_lit have been initialized!"
                 )
             elif len(d_std_lit) < 1:
-                raise ValueError(
-                    f"d_std_lit = {d_std_lit} cannot be an empty list!"
-                )
+                raise ValueError(f"d_std_lit = {d_std_lit} cannot be an empty list!")
 
         self._q_std_lit = [(2 * np.pi) / d for d in d_std_lit]
         return self._q_std_lit
 
     def calculate_linear_regression(
-        self, q_std_meas: list[float]
+        self, q_std_meas: List[float]
     ) -> tuple[float, float]:
         """Calculate the linear regression from `q_std_meas` against
         `q_std_lit` using `numpy.polyfit()` and return `slope` and
@@ -112,7 +114,7 @@ class PrepareStandard:
         return self._standard
 
     @property
-    def q_std_lit(self) -> list[float]:
+    def q_std_lit(self) -> List[float]:
         """Get lscattering vectors of standard from literature used."""
         return self._q_std_lit
 
@@ -131,7 +133,7 @@ class LLCAnalyzer:
         self._d_measured = [(2 * np.pi) / q for q in self.q_corr]
 
     def calibrate_data(
-        self, slope: float, q_meas: list[float], intercept: float
+        self, slope: float, q_meas: List[float], intercept: float
     ) -> None:
         """Calibrate list of measured scattering vectors `q_meas` with
         `(slope, intercept)` tuple from `calculate_linear_regression()`
@@ -140,7 +142,7 @@ class LLCAnalyzer:
 
         Args:
             slope (float): Slope of calculated linear regression from measured standard against literature values.
-            q_meas (list[float]): List of scattering vectors from raw measured data.
+            q_meas (List[float]): List of scattering vectors from raw measured data.
             intercept (float): Intercept of calculated linear regression from measured standard against literature values.
         """
         self._q_corr = [slope * q + intercept for q in q_meas]
@@ -184,16 +186,16 @@ class LLCAnalyzer:
                 return IndeterminatePhase()
 
     @property
-    def q_corr(self) -> list[float]:
+    def q_corr(self) -> List[float]:
         """Get calibrated scattering vectors."""
         return self._q_corr
 
     @property
-    def d_measured(self) -> list[float]:
+    def d_measured(self) -> List[float]:
         """Get lattice plane distances."""
         return self._d_measured
 
     @property
-    def d_ratio(self) -> list[float]:
+    def d_ratio(self) -> List[float]:
         """Get lattice plane ratios."""
         return self._d_ratio

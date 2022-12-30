@@ -2,6 +2,8 @@
 
 import numpy as np
 
+from typing import List, Tuple, Dict
+
 from sastools.analyzer.enums import LLCPhases, LLCSpaceGroups, LLCMillerIndices
 from sastools.analyzer.llcphase import LLCPhase
 
@@ -26,13 +28,13 @@ class HexagonalPhase(LLCPhase):
         return a_H1
 
     def calculate_lattice_parameters(
-        self, d_meas: list[float], phase: LLCPhases = LLCPhases.H1
+        self, d_meas: List[float], phase: LLCPhases = LLCPhases.H1
     ) -> None:
         """Calculate lattice parameters of hexagonal phase using a list
         of measured lattice plane distances `d_meas`.
 
         Args:
-            d_meas (list[float]): Measured lattice plane distances.
+            d_meas (List[float]): Measured lattice plane distances.
             phase (LLCPhases, optional): The hexagonal phase of the system. Defaults to LLCPhases.H1.
 
         Raises:
@@ -43,7 +45,7 @@ class HexagonalPhase(LLCPhase):
                 f"Chosen LLC phase '{phase}' is not (yet) supported."
             )
         self._exact_phase = phase
-        for i, j in enumerate(d_meas):
+        for i, _ in enumerate(d_meas):
             a_i = self._calculate_a_H1(
                 d_meas[i], self.miller_indices[0][i], self.miller_indices[1][i]
             )
@@ -64,18 +66,18 @@ class HexagonalPhase(LLCPhase):
         return self._space_group
 
     @property
-    def miller_indices(self) -> tuple[list[int], list[int], list[int]]:
+    def miller_indices(self) -> Tuple[List[int], List[int], List[int]]:
         """Get miller indices of hexagonal phase."""
         self._miller_indices = LLCMillerIndices[self._space_group.name].value
         return self._miller_indices
 
     @property
-    def lattice_parameters(self) -> list[float]:
+    def lattice_parameters(self) -> List[float]:
         """Get lattice parameters of hexagonal phase."""
         return self._lattice_parameters
 
     @property
-    def phase_information(self) -> dict:
+    def phase_information(self) -> Dict:
         """Get full phase information of hexagonal phase."""
         self._phase_information = dict(
             phase=self.exact_phase.value,
@@ -107,7 +109,7 @@ class CubicPhase(LLCPhase):
 
     def calculate_lattice_parameters(
         self,
-        d_meas: list[float],
+        d_meas: List[float],
         phase: LLCPhases = LLCPhases.V1,
         space_group: LLCSpaceGroups = LLCSpaceGroups.IA3D,
     ) -> None:
@@ -115,7 +117,7 @@ class CubicPhase(LLCPhase):
         measured lattice plane distances `d_meas`.
 
         Args:
-            d_meas (list[float]): Measured lattice plane distances.
+            d_meas (List[float]): Measured lattice plane distances.
             phase (LLCPhases, optional): The cubic phase of the system. Defaults to LLCPhases.V1.
             space_group (LLCSpaceGroups, optional): The space group corresponding to the cubic phase. Defaults to LLCSpaceGroups.IA3D.
 
@@ -137,13 +139,13 @@ class CubicPhase(LLCPhase):
             )
             self._lattice_parameters.append(a_i)
 
-    def calculate_d_reciprocal(self, peak_center: list[float]) -> None:
+    def calculate_d_reciprocal(self, peak_center: List[float]) -> None:
         """Calculate the reciprocal lattice plane distances
         `d_reciprocal` from the `peak_centers` determined through
         lorentzian fitting.
 
         Args:
-            peak_center (list[float]): Peak centers determined by lorentzian fitting for the cubic phase.
+            peak_center (List[float]): Peak centers determined by lorentzian fitting for the cubic phase.
         """
         self._d_reciprocal = [peak / (2 * np.pi) for peak in peak_center]
 
@@ -180,7 +182,7 @@ class CubicPhase(LLCPhase):
         self._space_group = space_group
 
     @property
-    def miller_indices(self) -> tuple[list[int], list[int], list[int]]:
+    def miller_indices(self) -> Tuple[List[int], List[int], List[int]]:
         """Get miller indices of cubic phase."""
         if self.space_group is None:
             raise ValueError("space_group property has to be provided first.")
@@ -188,12 +190,12 @@ class CubicPhase(LLCPhase):
         return self._miller_indices
 
     @property
-    def lattice_parameters(self) -> list[float]:
+    def lattice_parameters(self) -> List[float]:
         """Get lattice parameters of cubic phase."""
         return self._lattice_parameters
 
     @property
-    def phase_information(self) -> dict:
+    def phase_information(self) -> Dict:
         """Get full phase information of cubic phase."""
         self._phase_information = dict(
             phase=self.exact_phase.value,
@@ -202,12 +204,12 @@ class CubicPhase(LLCPhase):
         return self._phase_information
 
     @property
-    def d_reciprocal(self) -> list[float]:
+    def d_reciprocal(self) -> List[float]:
         """Get reciprocal lattice plane distances of cubic phase."""
         return self._d_reciprocal
 
     @property
-    def sqrt_miller(self) -> list[int]:
+    def sqrt_miller(self) -> List[int]:
         """Get square roots of miller indices of cubic phase."""
         return self._sqrt_miller
 
@@ -226,13 +228,13 @@ class LamellarPhase(LLCPhase):
         return "Lamellar LLC Phase"
 
     def calculate_lattice_parameters(
-        self, d_meas: list[float], phase: LLCPhases = LLCPhases.LA
+        self, d_meas: List[float], phase: LLCPhases = LLCPhases.LA
     ) -> None:
         """Calculate lattice parameters of lamellar phase using a list
         of measured lattice plane distances `d_meas`.
 
         Args:
-            d_meas (list[float]): Measured lattice plane distances.
+            d_meas (List[float]): Measured lattice plane distances.
             phase (LLCPhases, optional): The lamellar phase of the system. Defaults to LLCPhases.LA.
 
         Raises:
@@ -265,12 +267,12 @@ class LamellarPhase(LLCPhase):
         return self._miller_indices
 
     @property
-    def lattice_parameters(self) -> list[float]:
+    def lattice_parameters(self) -> List[float]:
         """Get lattice parameters of lamellar phase."""
         return self._lattice_parameters
 
     @property
-    def phase_information(self) -> dict:
+    def phase_information(self) -> Dict:
         """Get full phase information of lamellar phase."""
         self._phase_information = dict(
             phase=self.exact_phase.value,
@@ -293,13 +295,13 @@ class IndeterminatePhase(LLCPhase):
         return "Indeterminate LLC Phase"
 
     def calculate_lattice_parameters(
-        self, d_meas: list[float], phase: LLCPhases = LLCPhases.INDETERMINATE
+        self, d_meas: List[float], phase: LLCPhases = LLCPhases.INDETERMINATE
     ) -> None:
         """Do not use this method! Indeterminate phases have no lattice
         parameters.
 
         Args:
-            d_meas (list[float]): Measured lattice plane distances.
+            d_meas (List[float]): Measured lattice plane distances.
             phase (LLCPhases, optional): Indeterminate phase. Defaults to LLCPhases.INDETERMINATE.
 
         Raises:
@@ -330,7 +332,7 @@ class IndeterminatePhase(LLCPhase):
         return self._lattice_parameters
 
     @property
-    def phase_information(self) -> dict:
+    def phase_information(self) -> Dict:
         """Get full phase information of indeterminate phase."""
         self._phase_information = dict(
             phase=self.exact_phase.value,

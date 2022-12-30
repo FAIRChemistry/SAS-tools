@@ -2,18 +2,19 @@
 
 
 import os
-from pathlib import Path
 import re
 import tempfile
-
 import pandas as pd
+
 from lxml import etree
+from typing import Union, List, Dict
+from pathlib import Path
 
 
 class PDHReader:
     """Separate data block and XML metadata footer of PDH files."""
 
-    def __init__(self, path_to_directory: str | bytes | os.PathLike):
+    def __init__(self, path_to_directory: Union[str, bytes, os.PathLike]):
         """Pass the path to a directory containing PDH-type files to be
         read.
 
@@ -21,28 +22,24 @@ class PDHReader:
             path_to_directory (str | bytes | os.PathLike): Path to a directory containing PDH-type files.
         """
         path = list(Path(path_to_directory).glob("*.pdh"))
-        self._available_files = {
-            file.stem: file for file in path if file.is_file()
-        }
+        self._available_files = {file.stem: file for file in path if file.is_file()}
 
     def __repr__(self):
         return "PDH Reader"
 
     def _line_is_xml(self, line_in_file):
         # Match n whitespaces, followed by an XML opening tag `<`.
-        any_whitespace = re.compile("\s*<").match(line_in_file)
+        any_whitespace = re.compile(r"\s*<").match(line_in_file)
         return any_whitespace
 
-    def enumerate_available_files(self) -> dict[int, str]:
+    def enumerate_available_files(self) -> Dict[int, str]:
         """Enumerate the PDH files available in the given directory and
         return a dictionary with their index and name.
 
         Returns:
-            dict[int, str]: Indices and names of available files.
+            Dict[int, str]: Indices and names of available files.
         """
-        return {
-            count: value for count, value in enumerate(self.available_files)
-        }
+        return {count: value for count, value in enumerate(self.available_files)}
 
     def extract_data(self, filestem: str) -> pd.DataFrame:
         """Extract only data block as a `pandas.DataFrame`.
@@ -64,7 +61,7 @@ class PDHReader:
         )
         return dataframe
 
-    def extract_metadata(self, filestem: str) -> etree.ElementTree:
+    def extract_metadata(self, filestem: str) -> etree._ElementTree:
         """Extract XML metadata footer as an `etree.ElementTree`.
 
         Args:
@@ -83,6 +80,6 @@ class PDHReader:
         return XML_tree
 
     @property
-    def available_files(self) -> list[str]:
+    def available_files(self) -> List[str]:
         """Get file available in directory."""
         return self._available_files

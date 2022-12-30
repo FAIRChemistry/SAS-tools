@@ -1,15 +1,17 @@
 """Reader for Origin TXT output files containing Lorentzian data."""
 
 import os
-from pathlib import Path
-
 import pandas as pd
+
+from pathlib import Path
+from typing import Union
+
 
 
 class OriginReader:
     """Read Lorentzian data from Origin TXT file."""
 
-    def __init__(self, file: str | bytes | os.PathLike) -> None:
+    def __init__(self, file: Union[str, bytes, os.PathLike]) -> None:
         """Pass path to TXT file with Origin output.
 
         Args:
