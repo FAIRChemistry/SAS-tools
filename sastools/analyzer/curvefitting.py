@@ -54,7 +54,7 @@ class CurveFitting:
     def plot_raw_data(self) -> None:
         """Plot the data and save the plot"""
         exp_data_plot = sns.lineplot(
-            x="scattering_vector", y="counts_per_area", data=self.exp_data
+            x=self.x, y=self.y
         )
         exp_data_fig = exp_data_plot.get_figure()
         exp_data_fig.savefig(
