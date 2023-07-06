@@ -54,6 +54,7 @@ instrument (settings, parameters, ...)
 
 - measurement_type
   - Type: MeasurementType
+  - Multiple: True
   - Description: tba
 
 
