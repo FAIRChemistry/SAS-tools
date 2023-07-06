@@ -16,9 +16,66 @@ Root element of the SAS-tools data model.
 - datetime_modified
   - Type: datetime
   - Description: Date and time this dataset has last been modified.
+- experiment
+  - Type: [Experiment](#experiment)
+  - Description: A SAS experiment with measurements and analyses.
 - citation
   - Type: [Citation](#citation)
   - Description: Relevant information regarding the publication and citation of this dataset.
+
+
+### Experiment
+
+Container for SAS measurements and analyses.
+
+- name
+  - Type: string
+  - Description: tba
+- diffraction_type
+  - Type: [DiffractionType](#diffractiontype)
+  - Description: tba
+- measurements
+  - Type: [Measurement](#measurement)
+  - Multiple: True
+  - Description: tba
+- diffractograms
+  - Type: [Diffractogram](#diffractogram)
+  - Multiple: True
+  - Description: tba
+- analyses
+  - Type: [Analysis](#analysis)
+  - Multiple: True
+  - Description: tba
+
+
+### Measurement
+
+instrument (settings, parameters, ...)
+
+- measurement_type
+  - Type: MeasurementType
+  - Description: tba
+
+
+
+### Diffractogram
+
+preprocessing steps
+
+- data_array
+  - Type: float
+  - Multiple: True
+  - Description: tba
+
+
+### Analysis
+
+tba
+
+- name
+  - Type: string
+  - Description: tba
+
 
 
 ### Citation
