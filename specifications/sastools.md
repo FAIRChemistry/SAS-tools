@@ -223,3 +223,23 @@ Enumeration containing recognized identifiers for persons.
 ```python
 ORCID = "ORCID"
 ```
+
+
+### DiffractionType
+
+tba
+
+```python
+SAXS = auto()
+SANS = auto()
+```
+
+
+### MeasurementType
+
+tba
+
+```python
+CALIBRATION = auto()
+```
+

@@ -1,6 +1,12 @@
 ```mermaid
 classDiagram
+    SAStools *-- Experiment
     SAStools *-- Citation
+    Experiment *-- DiffractionType
+    Experiment *-- Measurement
+    Experiment *-- Diffractogram
+    Experiment *-- Analysis
+    Measurement *-- MeasurementType
     Citation *-- Subjects
     Citation *-- Person
     Citation *-- Publication
@@ -12,7 +18,28 @@ classDiagram
     class SAStools {
         +datetime datetime_created*
         +datetime datetime_modified
+        +Experiment experiment
         +Citation citation
+    }
+    
+    class Experiment {
+        +string name
+        +DiffractionType diffraction_type
+        +Measurement[0..*] measurements
+        +Diffractogram[0..*] diffractograms
+        +Analysis[0..*] analyses
+    }
+    
+    class Measurement {
+        +MeasurementType measurement_type
+    }
+    
+    class Diffractogram {
+        +float[0..*] data_array
+    }
+    
+    class Analysis {
+        +string name
     }
     
     class Citation {
@@ -70,6 +97,17 @@ classDiagram
     class IdentifierTypes {
         << Enumeration >>
         +ORCID
+    }
+    
+    class DiffractionType {
+        << Enumeration >>
+        +SAXS
+        +SANS
+    }
+    
+    class MeasurementType {
+        << Enumeration >>
+        +CALIBRATION
     }
     
 ```
