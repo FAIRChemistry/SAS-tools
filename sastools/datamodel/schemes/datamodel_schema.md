@@ -4,9 +4,13 @@ classDiagram
     SAStools *-- Citation
     Experiment *-- DiffractionType
     Experiment *-- Measurement
-    Experiment *-- Diffractogram
     Experiment *-- Analysis
     Measurement *-- MeasurementType
+    Measurement *-- Instrument
+    Measurement *-- Diffractogram
+    Instrument *-- InstrumentSetting
+    Diffractogram *-- SASUnit
+    Analysis *-- SASUnit
     Citation *-- Subjects
     Citation *-- Person
     Citation *-- Publication
@@ -23,23 +27,44 @@ classDiagram
     }
     
     class Experiment {
-        +string name
+        +string name*
         +DiffractionType diffraction_type
         +Measurement[0..*] measurements
-        +Diffractogram[0..*] diffractograms
         +Analysis[0..*] analyses
     }
     
     class Measurement {
-        +MeasurementType measurement_type
+        +MeasurementType[0..*] measurement_type*
+        +Instrument instrument*
+        +Diffractogram diffractogram*
+    }
+    
+    class Instrument {
+        +string name*
+        +string manufacturer*
+        +string serial_number
+        +string firmware_version
+        +InstrumentSetting[0..*] instrument_settings
+    }
+    
+    class InstrumentSetting {
+        +string setting_name*
+        +string, integer, float, boolean value*
     }
     
     class Diffractogram {
-        +float[0..*] data_array
+        +float[0..*] scattering_vector_array*
+        +float[0..*] counts_per_area_array*
+        +SASUnit scattering_vector_unit
+        +SASUnit counts_per_area_unit
     }
     
     class Analysis {
-        +string name
+        +string name*
+        +string method_description
+        +string[0..*] input_data_id
+        +string, integer, float, boolean[0..*] result
+        +SASUnit unit
     }
     
     class Citation {
@@ -108,6 +133,14 @@ classDiagram
     class MeasurementType {
         << Enumeration >>
         +CALIBRATION
+        +SAMPLE
+        +PROCESSED
+    }
+    
+    class SASUnit {
+        << Enumeration >>
+        +NM_INV
+        +UM2_INV
     }
     
 ```

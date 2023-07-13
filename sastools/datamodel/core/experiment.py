@@ -1,16 +1,18 @@
 import sdRDM
 
-from typing import List, Optional
+from typing import Optional, Union, List
 from pydantic import Field
 from sdRDM.base.listplus import ListPlus
 from sdRDM.base.utils import forge_signature, IDGenerator
 
 
+from .diffractiontype import DiffractionType
+from .instrument import Instrument
+from .diffractogram import Diffractogram
+from .sasunit import SASUnit
 from .measurement import Measurement
 from .measurementtype import MeasurementType
-from .diffractiontype import DiffractionType
 from .analysis import Analysis
-from .diffractogram import Diffractogram
 
 
 @forge_signature
@@ -24,8 +26,8 @@ class Experiment(sdRDM.DataModel):
         xml="@id",
     )
 
-    name: Optional[str] = Field(
-        default=None,
+    name: str = Field(
+        ...,
         description="tba",
     )
 
@@ -40,12 +42,6 @@ class Experiment(sdRDM.DataModel):
         description="tba",
     )
 
-    diffractograms: List[Diffractogram] = Field(
-        default_factory=ListPlus,
-        multiple=True,
-        description="tba",
-    )
-
     analyses: List[Analysis] = Field(
         default_factory=ListPlus,
         multiple=True,
@@ -54,7 +50,9 @@ class Experiment(sdRDM.DataModel):
 
     def add_to_measurements(
         self,
-        measurement_type: Optional[MeasurementType] = None,
+        instrument: Instrument,
+        diffractogram: Diffractogram,
+        measurement_type: List[MeasurementType] = ListPlus(),
         id: Optional[str] = None,
     ) -> None:
         """
@@ -62,10 +60,14 @@ class Experiment(sdRDM.DataModel):
 
         Args:
             id (str): Unique identifier of the 'Measurement' object. Defaults to 'None'.
-            measurement_type (): tba. Defaults to None
+            instrument (): tba.
+            diffractogram (): tba.
+            measurement_type (): tba. Defaults to ListPlus()
         """
 
         params = {
+            "instrument": instrument,
+            "diffractogram": diffractogram,
             "measurement_type": measurement_type,
         }
 
@@ -76,41 +78,33 @@ class Experiment(sdRDM.DataModel):
 
         return self.measurements[-1]
 
-    def add_to_diffractograms(
-        self, data_array: List[float] = ListPlus(), id: Optional[str] = None
-    ) -> None:
-        """
-        This method adds an object of type 'Diffractogram' to attribute diffractograms
-
-        Args:
-            id (str): Unique identifier of the 'Diffractogram' object. Defaults to 'None'.
-            data_array (): tba. Defaults to ListPlus()
-        """
-
-        params = {
-            "data_array": data_array,
-        }
-
-        if id is not None:
-            params["id"] = id
-
-        self.diffractograms.append(Diffractogram(**params))
-
-        return self.diffractograms[-1]
-
     def add_to_analyses(
-        self, name: Optional[str] = None, id: Optional[str] = None
+        self,
+        name: str,
+        method_description: Optional[str] = None,
+        input_data_id: List[str] = ListPlus(),
+        result: List[Union[str, int, float, bool]] = ListPlus(),
+        unit: Optional[SASUnit] = None,
+        id: Optional[str] = None,
     ) -> None:
         """
         This method adds an object of type 'Analysis' to attribute analyses
 
         Args:
             id (str): Unique identifier of the 'Analysis' object. Defaults to 'None'.
-            name (): tba. Defaults to None
+            name (): tba.
+            method_description (): tba. Defaults to None
+            input_data_id (): tba. Defaults to ListPlus()
+            result (): tba. Defaults to ListPlus()
+            unit (): tba. Defaults to None
         """
 
         params = {
             "name": name,
+            "method_description": method_description,
+            "input_data_id": input_data_id,
+            "result": result,
+            "unit": unit,
         }
 
         if id is not None:

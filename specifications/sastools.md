@@ -28,7 +28,7 @@ Root element of the SAS-tools data model.
 
 Container for SAS measurements and analyses.
 
-- name
+- __name__
   - Type: string
   - Description: tba
 - diffraction_type
@@ -36,10 +36,6 @@ Container for SAS measurements and analyses.
   - Description: tba
 - measurements
   - Type: [Measurement](#measurement)
-  - Multiple: True
-  - Description: tba
-- diffractograms
-  - Type: [Diffractogram](#diffractogram)
   - Multiple: True
   - Description: tba
 - analyses
@@ -50,22 +46,71 @@ Container for SAS measurements and analyses.
 
 ### Measurement
 
-instrument (settings, parameters, ...)
+tba
 
-- measurement_type
-  - Type: MeasurementType
+- __measurement_type__
+  - Type: [MeasurementType](#measurementtype)
+  - Multiple: True
+  - Description: tba
+- __instrument__
+  - Type: [Instrument](#instrument)
+  - Description: tba
+- __diffractogram__
+  - Type: [Diffractogram](#diffractogram)
+  - Description: tba
+
+
+### Instrument
+
+tba
+
+- __name__
+  - Type: string
+  - Description: tba
+- __manufacturer__
+  - Type: string
+  - Description: tba
+- serial_number
+  - Type: string
+  - Description: tba
+- firmware_version
+  - Type: string
+  - Description: tba
+- instrument_settings
+  - Type: [InstrumentSetting](#instrumentsetting)
   - Multiple: True
   - Description: tba
 
+
+### InstrumentSetting
+
+tba
+
+- __setting_name__
+  - Type: string
+  - Description: tba
+- __value__
+  - Type: string, integer, float, boolean
+  - Description: tba
 
 
 ### Diffractogram
 
 preprocessing steps
 
-- data_array
+- __scattering_vector_array__
   - Type: float
   - Multiple: True
+  - Description: tba
+- __counts_per_area_array__
+  - Type: float
+  - Multiple: True
+  - Description: tba
+- scattering_vector_unit
+  - Type: [SASUnit](#sasunit)
+  - Description: tba
+- counts_per_area_unit
+  - Type: [SASUnit](#sasunit)
   - Description: tba
 
 
@@ -73,10 +118,23 @@ preprocessing steps
 
 tba
 
-- name
+- __name__
   - Type: string
   - Description: tba
-
+- method_description
+  - Type: string
+  - Description: tba
+- input_data_id
+  - Type: string
+  - Multiple: True
+  - Description: tba
+- result
+  - Type: string, integer, float, boolean
+  - Multiple: True
+  - Description: tba
+- unit
+  - Type: [SASUnit](#sasunit)
+  - Description: tba
 
 
 ### Citation
@@ -242,5 +300,16 @@ tba
 
 ```python
 CALIBRATION = auto()
+SAMPLE = auto()
+PROCESSED = auto()
 ```
 
+
+### SASUnit
+
+tba
+
+```python
+NM_INV = "nm^-1"
+UM2_INV = "um^-2"
+```

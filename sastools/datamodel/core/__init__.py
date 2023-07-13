@@ -1,6 +1,8 @@
 from .sastools import SAStools
 from .experiment import Experiment
 from .measurement import Measurement
+from .instrument import Instrument
+from .instrumentsetting import InstrumentSetting
 from .diffractogram import Diffractogram
 from .analysis import Analysis
 from .citation import Citation
@@ -12,6 +14,7 @@ from .publicationtypes import PublicationTypes
 from .identifiertypes import IdentifierTypes
 from .diffractiontype import DiffractionType
 from .measurementtype import MeasurementType
+from .sasunit import SASUnit
 
 __doc__ = ""
 
@@ -19,6 +22,8 @@ __all__ = [
     "SAStools",
     "Experiment",
     "Measurement",
+    "Instrument",
+    "InstrumentSetting",
     "Diffractogram",
     "Analysis",
     "Citation",
@@ -30,4 +35,5 @@ __all__ = [
     "IdentifierTypes",
     "DiffractionType",
     "MeasurementType",
+    "SASUnit",
 ]

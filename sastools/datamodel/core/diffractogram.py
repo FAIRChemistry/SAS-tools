@@ -6,6 +6,9 @@ from sdRDM.base.listplus import ListPlus
 from sdRDM.base.utils import forge_signature, IDGenerator
 
 
+from .sasunit import SASUnit
+
+
 @forge_signature
 class Diffractogram(sdRDM.DataModel):
 
@@ -17,8 +20,24 @@ class Diffractogram(sdRDM.DataModel):
         xml="@id",
     )
 
-    data_array: List[float] = Field(
-        default_factory=ListPlus,
+    scattering_vector_array: List[float] = Field(
         multiple=True,
+        description="tba",
+        default_factory=ListPlus,
+    )
+
+    counts_per_area_array: List[float] = Field(
+        multiple=True,
+        description="tba",
+        default_factory=ListPlus,
+    )
+
+    scattering_vector_unit: Optional[SASUnit] = Field(
+        default=None,
+        description="tba",
+    )
+
+    counts_per_area_unit: Optional[SASUnit] = Field(
+        default=None,
         description="tba",
     )
